@@ -1,0 +1,43 @@
+# Only tested on latest HEAD
+
+require 'rubygems'
+require 'camping'
+require 'filtering_camping'
+
+Camping.goes :Filters
+
+module Filters
+  include FilteringCamping
+  
+  before :Index do
+    @hello = 2
+  end
+  
+  before '/login' do
+    @world = 3
+  end
+  
+  before :all do
+    @var = 1
+  end
+  
+  module Controllers
+    class Index < R '/'
+      def get
+        (@hello == 2).to_s
+      end
+    end
+    
+    class Login < R '/login'
+      def get
+        (@world == 4).to_s
+      end
+    end
+    
+    class AnotherOne < R '/@'
+      def get
+        (@var == 1).to_s
+      end
+    end
+  end
+end
